@@ -4,7 +4,7 @@ module.exports = {
 
   run: async (client, message, args) => {
     let channel = message.channel
-    let quantity = args[0]
+    let quantity = Math.floor(args[0])
 
     if (!message.member.permissions.has('MANAGE_MESSAGES')) {
       return message.reply(
@@ -18,14 +18,16 @@ module.exports = {
       )
     }
 
-    if (quantity > 100) {
-      return message.reply('Não é possível apagar mais que 100 mensagens!')
+    if (quantity > 99) {
+      return message.reply('Não é possível apagar mais que 99 mensagens!')
     }
 
-    channel.bulkDelete(quantity + 1)
+    await channel.bulkDelete(quantity + 1)
 
-    const msg = await message.channel.send(
-      `${quantity} mensagens foram apagadas!`
+    const msg = await channel.send(
+      quantity > 1 ?
+      `${quantity} mensagens foram apagadas!` :
+      `1 mensagem foi apagada!`
     )
 
     setTimeout(() => {
